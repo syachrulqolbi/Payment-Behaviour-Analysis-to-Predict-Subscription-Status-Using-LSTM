@@ -38,25 +38,12 @@ These are the results for our models.
     <th class="tg-7btt" colspan="3">Result</th>
   </tr>
   <tr>
+    <td class="tg-7btt"></td>
     <td class="tg-7btt">Accuracy</td>
     <td class="tg-7btt">Val_Accuracy</td>
   </tr>
   <tr>
     <td class="tg-c3ow">-</td>
-    <td class="tg-c3ow">-</td>
-  </tr>
-</table></div>
-
-### Covid Model (Normal/Pneumonia/COVID)
-<div class="tg-wrap"><table class="tg">
-  <tr>
-    <th class="tg-7btt" colspan="3">Result</th>
-  </tr>
-  <tr>
-    <td class="tg-7btt">Accuracy</td>
-    <td class="tg-7btt">Val_Accuracy</td>
-  </tr>
-  <tr>
     <td class="tg-c3ow">-</td>
     <td class="tg-c3ow">-</td>
   </tr>
