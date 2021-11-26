@@ -32,10 +32,15 @@ Tested with
 Additional requirements to generate dataset:
 
 * Os
+* Math
 * IPython.display import clear_output
 * Sklearn.metrics import classification_report, confusion_matrix
 * Shutil
 * Google.colab import drive
+* FastAPI
+* Pydantic
+* Joblib
+* Pickle
 
 
 ## Results
