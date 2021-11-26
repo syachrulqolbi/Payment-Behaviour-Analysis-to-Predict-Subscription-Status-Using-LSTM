@@ -95,10 +95,6 @@ def scaling_amountTotal(amountTotal_9, amountTotal_8, amountTotal_7, amountTotal
     sc = joblib.load("scaler.gz")
     return sc.transform(np.reshape(x, (1, -1)))
 
-@app.get("/")
-def home():
-    return "Welcome"
-
 @app.get("/predict")
 def predict(data: Data):
     amount_total = scaling_amountTotal(encode_amountTotal(data.amountTotal_9), 
