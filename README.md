@@ -2,14 +2,14 @@
 
 ## Data
 Payment History from Telkom DDB, feature used in the model:
-1. Billing Amount Total
-2. Billing Status
-3. Billing Payment Date
-4. Gladius Paket Radius
+* Billing Amount Total
+* Billing Status
+* Billing Payment Date
+* Gladius Paket Radius
 
 ## Team Member
-* Syachrul Qolbi Nur Septi
-* Fauzi Arifin
+1. Syachrul Qolbi Nur Septi
+2. Fauzi Arifin
 
 ## Table of Contents
 1. [Requirements](#requirements) to install on your system
