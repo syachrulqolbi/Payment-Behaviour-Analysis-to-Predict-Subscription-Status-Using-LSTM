@@ -49,7 +49,7 @@ These are the results for our models.
 ### LSTM Model (Unsubscribe/Subscribe)
 <div class="tg-wrap"><table class="tg">
   <tr>
-    <th class="tg-14btt" colspan="3">Result</th>
+    <th class="tg-7btt" colspan="6">Result</th>
   </tr>
   <tr>
     <td class="tg-7btt"></td>
