@@ -56,7 +56,6 @@ These are the results for our models.
     <td class="tg-7btt">Accuracy</td>
     <td class="tg-7btt">Precision</td>
     <td class="tg-7btt">Recall</td>
-    <td class="tg-7btt">Sensitivity</td>
     <td class="tg-7btt">F1-Score</td>
   </tr>
   <tr>
@@ -64,14 +63,12 @@ These are the results for our models.
     <td class="tg-c3ow">82.95%</td>
     <td class="tg-c3ow">93.23%</td>
     <td class="tg-c3ow">75.66%</td>
-    <td class="tg-c3ow">75.66%</td>
     <td class="tg-c3ow">83.53%</td>
   </tr>
   <tr>
     <td class="tg-c3ow">Subscribe</td>
     <td class="tg-c3ow">82.95%</td>
     <td class="tg-c3ow">74.06%</td>
-    <td class="tg-c3ow">92.67%</td>
     <td class="tg-c3ow">92.67%</td>
     <td class="tg-c3ow">82.33%</td>
   </tr>
