@@ -16,7 +16,7 @@ Payment History from Telkom DDB, feature used in the model:
 2. Code to create, training, and evaluating the [model](Behaviour_Payment.ipynb)
 3. [Results](#results)
 4. [Links to google colab](https://colab.research.google.com/drive/1pUasmKKcQWSiSrb4o4oES9xgbO1se5py?authuser=2#scrollTo=v0719deFT8yn)
-5. Tutorial
+5. [Tutorial](#tutorial)
 
 ## Requirements
 
