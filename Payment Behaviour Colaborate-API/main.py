@@ -10,7 +10,7 @@ import math
 app = FastAPI()
 
 model = tf.keras.models.load_model("model_lstm.h5")
-model2 = pickle.load(open('model_razi', 'rb'))
+model2 = pickle.load(open('model_timeseriesforest', 'rb'))
 
 class Data(BaseModel):
     billing_11_amountTotal: str
