@@ -77,6 +77,8 @@ These are the results for our models.
 
 ## Tutorial
 # Download Model Time Series Forest
+
+Pastikan sudah mendownload Model Time Series Forest, link download ada di [Link Download model timeseriesforest](Link Download model_timeseriesforest.txt)
 # Instalasi Python
 
 Pastikan sudah terinstall python dan pip dalam system anda, jika system anda mengunakan linux bisa mengikuti command di bawah ini
