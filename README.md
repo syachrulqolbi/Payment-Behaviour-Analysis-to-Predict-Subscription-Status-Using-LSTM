@@ -97,6 +97,7 @@ Agar code dapat berjalan di perlukan beberapa dependecy, dapat langsung menjalan
 pip install fastapi
 pip install uvicorn
 pip install tensorflow
+pip install pyts
 ```
 
 # Menjalankan API
@@ -120,37 +121,51 @@ Kita akan memprediksi status berlangganan user, apakah user tersebut akan berlan
 
 ```
 {
-    "amountTotal_9": "630.300,00", # billing_{}_amountTotal 9 Bulan Sebelumnya
-    "amountTotal_8": "630.300,00",
-    "amountTotal_7": "630.300,00",
-    "amountTotal_6": "630.300,00",
-    "amountTotal_5": "630.300,00",
-    "amountTotal_4": "651.000,00",
-    "amountTotal_3": "630.300,00",
-    "amountTotal_2": "630.300,00", # billing_{}_amountTotal 2 Bulan Sebelumnya
-    "amountTotal_1": "000.000,00", # billing_{}_amountTotal 1 Bulan Sebelumnya
+    "billing_11_amountTotal": "112.860,00",
+    "billing_10_amountTotal": "127.480,00",
+    "billing_9_amountTotal": "120.060,00",
+    "billing_8_amountTotal": "112.860,00",
+    "billing_7_amountTotal": "127.440,00",
+    "billing_6_amountTotal": "124.008,00",
+    "billing_5_amountTotal": "126.360,00",
+    "billing_4_amountTotal": "113.520,00",
+    "billing_3_amountTotal": "116.160,00",
+    "billing_2_amountTotal": "115.830,00",
 
-    "status_9": "PAID", # billing_{}_status 9 Bulan Sebelumnya
-    "status_8": "PAID",
-    "status_7": "PAID",
-    "status_6": "PAID",
-    "status_5": "PAID",
-    "status_4": "PAID",
-    "status_3": "PAID",
-    "status_2": "PAID", # billing_{}_status 2 Bulan Sebelumnya
-    "status_1": "UNPAID", # billing_{}_status 1 Bulan Sebelumnya
+    "billing_11_status": "PAID",
+    "billing_10_status": "PAID",
+    "billing_9_status": "PAID",
+    "billing_8_status": "PAID",
+    "billing_7_status": "PAID",
+    "billing_6_status": "PAID",
+    "billing_5_status": "PAID",
+    "billing_4_status": "PAID",
+    "billing_3_status": "PAID",
+    "billing_2_status": "PAID",
 
-    "paymentDate_9": "20201222", # billing_{}_paymentDate 9 Bulan Sebelumnya
-    "paymentDate_8": "20210107", 
-    "paymentDate_7": "20210207",
-    "paymentDate_6": "20210307",
-    "paymentDate_5": "20210404",
-    "paymentDate_4": "20210504",
-    "paymentDate_3": "20210614",
-    "paymentDate_2": "20210714", # billing_{}_paymentDate 2 Bulan Sebelumnya
-    "paymentDate_1": "20210800", # billing_{}_paymentDate 1 Bulan Sebelumnya
+    "billing_11_channel": "FINNET WAY4 - FINNET",
+    "billing_10_channel": "FINNET WAY4 - FINNET",
+    "billing_9_channel": "FINNET WAY4 - FINNET",
+    "billing_8_channel": "FINNET WAY4 - FINNET",
+    "billing_7_channel": "FINNET WAY4 - FINNET",
+    "billing_6_channel": "FINNET WAY4 - FINNET",
+    "billing_5_channel": "FINNET WAY4 - FINNET",
+    "billing_4_channel": "FINNET WAY4 - FINNET",
+    "billing_3_channel": "FINNET WAY4 - FINNET",
+    "billing_2_channel": "FINNET WAY4 - FINNET",
 
-    "paketradius": "INETNLOY30" # gladius.paketradius
+    "billing_11_paymentDate": "20201221",
+    "billing_10_paymentDate": "20210123",
+    "billing_9_paymentDate": "20210225",
+    "billing_8_paymentDate": "20210316",
+    "billing_7_paymentDate": "20210403",
+    "billing_6_paymentDate": "20210503",
+    "billing_5_paymentDate": "20210606",
+    "billing_4_paymentDate": "20210706",
+    "billing_3_paymentDate": "20210819",
+    "billing_2_paymentDate": "20210906",
+
+    "paketradius": "INET10Q050"
 }
 ```
 dan untuk URL API mengunakan format sebagai berikut
@@ -163,8 +178,8 @@ API akan mengembalikan variabel Percentage dan Predict Description beserta value
 ## Hasil Retun API
 ```
 {
-    "Percentage": 98.09,
-    "Predict Description" : "Loyal"
+    "Percentage": 98.99,
+    "Predict Description": "Loyal"
 }
 ```
 ## Contoh mengunakan POSTMAN
