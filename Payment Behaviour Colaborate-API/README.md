@@ -5,17 +5,18 @@ Payment History from Telkom DDB, feature used in the model:
 * Billing Amount Total
 * Billing Status
 * Billing Payment Date
+* Billing Channel
 * Gladius Paket Radius
 
 ## Team Member
 1. Syachrul Qolbi Nur Septi
-2. Fauzi Arifin
+2. Fakhrur Razi
 
 ## Table of Contents
 1. [Requirements](#requirements) to install on your system
 2. Code to create, training, and evaluating the [model](Behaviour_Payment.ipynb)
 3. [Results](#results)
-4. [Links to google colab](https://colab.research.google.com/drive/1pUasmKKcQWSiSrb4o4oES9xgbO1se5py?authuser=2#scrollTo=v0719deFT8yn)
+4. [Links to google colab](https://colab.research.google.com/drive/17y3vGCJMIQ4a7-We2jWhOlCaDOYyyRSF#scrollTo=NIO8Mq6K9SKQ)
 5. [Tutorial](#tutorial)
 
 ## Requirements
