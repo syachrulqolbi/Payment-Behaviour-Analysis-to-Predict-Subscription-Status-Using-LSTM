@@ -77,6 +77,9 @@ These are the results for our models.
 
 ## Tutorial
 # Download Model Time Series Forest
+
+Pastikan sudah mendownload Model Time Series Forest, link download berada pada [Link_Download_Model_Time_Series_Forest](https://drive.google.com/file/d/1yyFohbYDOACLY6e_iknS2-jgQBtL7Jf0/view?usp=sharing) lalu simpan didalam satu folder Payment Behaviour Colaborate-API
+
 # Instalasi Python
 
 Pastikan sudah terinstall python dan pip dalam system anda, jika system anda mengunakan linux bisa mengikuti command di bawah ini
