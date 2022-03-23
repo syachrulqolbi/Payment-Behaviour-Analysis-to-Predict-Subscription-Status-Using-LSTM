@@ -160,6 +160,7 @@ def predict(url: str = Form(...)):
          "TANGGAL"]].sort_values(by = ["PERIODE", "TANGGAL"])
 
     df = check_date(df, df["PERIODE"].unique())
+    df = df.loc[df["PERIODE"] >= np.sort(df["PERIODE"].unique())[-10:][0]]
 
     df = df.pivot_table(index = "ND", columns = "PERIODE", aggfunc = np.sum).join(df.pivot_table(index = "ND", columns = "PERIODE", values = ["STATUS_PEMBAYARAN", "LOKASI_PEMBAYARAN", "TANGGAL"], aggfunc = "last"), how = "outer")
     df.reset_index(level = 0, inplace = True)
