@@ -1,22 +1,18 @@
-# Payment Behaviour Analysis to Predict Subscribption Status Using LSTM
+# Payment Behaviour Analysis to Predict Subscribption Status Using LSTM (Single)
 
 ## Data
 Payment History from Telkom DDB, feature used in the model:
 * Billing Amount Total
-* Billing Status
 * Billing Payment Date
-* Billing Channel
-* Gladius Paket Radius
 
 ## Team Member
 1. Syachrul Qolbi Nur Septi
-2. Fakhrur Razi
 
 ## Table of Contents
 1. [Requirements](#requirements) to install on your system
-2. Code to create, training, and evaluating the [model](Behaviour_Payment.ipynb)
+2. Code to create, training, and evaluating the [model](Payment_Behaviour.ipynb)
 3. [Results](#results)
-4. [Links to google colab](https://colab.research.google.com/drive/17y3vGCJMIQ4a7-We2jWhOlCaDOYyyRSF#scrollTo=NIO8Mq6K9SKQ)
+4. [Links to google colab](https://colab.research.google.com/drive/17Ews_Ol0RjeU69ewKKElYorFSuWymRtb?usp=sharing)
 5. [Tutorial](#tutorial)
 
 ## Requirements
@@ -33,13 +29,11 @@ Tested with
 Additional requirements to generate dataset:
 
 * Os
-* Math
-* IPython.display import clear_output
 * Sklearn.metrics import classification_report, confusion_matrix
+* Sklearn.preprocessing import StandardScaler
 * Shutil
 * Google.colab import drive
 * FastAPI
-* Pydantic
 * Joblib
 * Pickle
 
@@ -61,25 +55,21 @@ These are the results for our models.
   </tr>
   <tr>
     <td class="tg-c3ow">Unsubscribe</td>
-    <td class="tg-c3ow">82.82%</td>
-    <td class="tg-c3ow">79.94%</td>
-    <td class="tg-c3ow">85.98%</td>
-    <td class="tg-c3ow">82.85%</td>
+    <td class="tg-c3ow">96.70%</td>
+    <td class="tg-c3ow">86.40%</td>
+    <td class="tg-c3ow">93.90%</td>
+    <td class="tg-c3ow">89.99%</td>
   </tr>
   <tr>
     <td class="tg-c3ow">Subscribe</td>
-    <td class="tg-c3ow">82.82%</td>
-    <td class="tg-c3ow">85.94%</td>
-    <td class="tg-c3ow">79.88%</td>
-    <td class="tg-c3ow">82.80%</td>
+    <td class="tg-c3ow">96.70%</td>
+    <td class="tg-c3ow">98.84%</td>
+    <td class="tg-c3ow">97.23%</td>
+    <td class="tg-c3ow">98.02%</td>
   </tr>
 </table></div>
 
 ## Tutorial
-# Download Model Time Series Forest
-
-Pastikan sudah mendownload Model Time Series Forest, link download berada pada [Link_Download_Model_Time_Series_Forest](https://drive.google.com/file/d/1yyFohbYDOACLY6e_iknS2-jgQBtL7Jf0/view?usp=sharing) lalu simpan didalam satu folder Payment Behaviour Colaborate-API
-
 # Instalasi Python
 
 Pastikan sudah terinstall python dan pip dalam system anda, jika system anda mengunakan linux bisa mengikuti command di bawah ini
@@ -97,7 +87,6 @@ Agar code dapat berjalan di perlukan beberapa dependecy, dapat langsung menjalan
 pip install fastapi
 pip install uvicorn
 pip install tensorflow
-pip install pyts
 ```
 
 # Menjalankan API
@@ -132,28 +121,6 @@ Kita akan memprediksi status berlangganan user, apakah user tersebut akan berlan
     "billing_3_amountTotal": "116.160,00",
     "billing_2_amountTotal": "115.830,00",
 
-    "billing_11_status": "PAID",
-    "billing_10_status": "PAID",
-    "billing_9_status": "PAID",
-    "billing_8_status": "PAID",
-    "billing_7_status": "PAID",
-    "billing_6_status": "PAID",
-    "billing_5_status": "PAID",
-    "billing_4_status": "PAID",
-    "billing_3_status": "PAID",
-    "billing_2_status": "PAID",
-
-    "billing_11_channel": "FINNET WAY4 - FINNET",
-    "billing_10_channel": "FINNET WAY4 - FINNET",
-    "billing_9_channel": "FINNET WAY4 - FINNET",
-    "billing_8_channel": "FINNET WAY4 - FINNET",
-    "billing_7_channel": "FINNET WAY4 - FINNET",
-    "billing_6_channel": "FINNET WAY4 - FINNET",
-    "billing_5_channel": "FINNET WAY4 - FINNET",
-    "billing_4_channel": "FINNET WAY4 - FINNET",
-    "billing_3_channel": "FINNET WAY4 - FINNET",
-    "billing_2_channel": "FINNET WAY4 - FINNET",
-
     "billing_11_paymentDate": "20201221",
     "billing_10_paymentDate": "20210123",
     "billing_9_paymentDate": "20210225",
@@ -164,8 +131,6 @@ Kita akan memprediksi status berlangganan user, apakah user tersebut akan berlan
     "billing_4_paymentDate": "20210706",
     "billing_3_paymentDate": "20210819",
     "billing_2_paymentDate": "20210906",
-
-    "paketradius": "INET10Q050"
 }
 ```
 dan untuk URL API mengunakan format sebagai berikut
