@@ -17,6 +17,8 @@ from typing import List
 app = FastAPI()
 model = tf.keras.models.load_model("model_lstm.h5")
 sc = joblib.load("scaler.gz")
+sc_pd = joblib.load("scaler_pd.gz")
+sc_stat = joblib.load("scaler_stat.gz")
 
 def shift(a):
     if a >= 1 and a < 22:
@@ -254,9 +256,15 @@ def predict(url: str = Form(...)):
                           "billing_1_amountTotal", "billing_1_paymentDate", "billing_1_status", "billing_1_channel", "LTV", "status_index"]].values, 
                       (df.values.shape[0], 10, 6))
 
+    data[:, :, 0] = data[:, :, 0] - data[:, :, 0].mean(axis = 1).reshape(-1, 1)
+
     data[:, :, 0] = sc.transform(data[:, :, 0])
+    data[:, :, 1] = sc_pd.transform(data[:, :, 1])
+    data[:, :, 2] = sc_stat.transform(data[:, :, 2])
+
     data = np.array(data)
     data = np.reshape(data, (data.shape[0], data.shape[1], data.shape[2]))
+
     data2 = data[:, 0, 4:6].astype(float)
     data = data[:, :, :3].astype(float)
 
