@@ -143,7 +143,7 @@ API akan mengembalikan variabel Percentage dan Predict Description beserta value
 ## Hasil Retun API
 ```
 {
-    "Percentage": 98.99,
+    "Percentage": 100,
     "Predict Description": "Loyal"
 }
 ```
