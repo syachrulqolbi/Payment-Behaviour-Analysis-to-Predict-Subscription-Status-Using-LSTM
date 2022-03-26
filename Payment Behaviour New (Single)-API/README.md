@@ -10,10 +10,9 @@ Payment History from Telkom DDB, feature used in the model:
 
 ## Table of Contents
 1. [Requirements](#requirements) to install on your system
-2. Code to create, training, and evaluating the [model](Payment_Behaviour.ipynb)
-3. [Results](#results)
-4. [Links to google colab](https://colab.research.google.com/drive/17Ews_Ol0RjeU69ewKKElYorFSuWymRtb?usp=sharing)
-5. [Tutorial](#tutorial)
+2. [Results](#results)
+3. [Links to google colab](https://colab.research.google.com/drive/17Ews_Ol0RjeU69ewKKElYorFSuWymRtb?usp=sharing)
+4. [Tutorial](#tutorial)
 
 ## Requirements
 
