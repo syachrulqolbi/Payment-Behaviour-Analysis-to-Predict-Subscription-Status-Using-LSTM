@@ -10,10 +10,9 @@ Payment History from Telkom DDB, feature used in the model:
 
 ## Table of Contents
 1. [Requirements](#requirements) to install on your system
-2. Code to create, training, and evaluating the [model](Payment_Behaviour.ipynb)
-3. [Results](#results)
-4. [Links to google colab](https://colab.research.google.com/drive/17Ews_Ol0RjeU69ewKKElYorFSuWymRtb?usp=sharing)
-5. [Tutorial](#tutorial)
+2. [Results](#results)
+3. [Links to google colab](https://colab.research.google.com/drive/17Ews_Ol0RjeU69ewKKElYorFSuWymRtb?usp=sharing)
+4. [Tutorial](#tutorial)
 
 ## Requirements
 
@@ -110,27 +109,27 @@ Kita akan memprediksi status berlangganan user, apakah user tersebut akan berlan
 
 ```
 {
-    "billing_11_amountTotal": "112.860,00",
-    "billing_10_amountTotal": "127.480,00",
-    "billing_9_amountTotal": "120.060,00",
-    "billing_8_amountTotal": "112.860,00",
-    "billing_7_amountTotal": "127.440,00",
-    "billing_6_amountTotal": "124.008,00",
-    "billing_5_amountTotal": "126.360,00",
-    "billing_4_amountTotal": "113.520,00",
-    "billing_3_amountTotal": "116.160,00",
-    "billing_2_amountTotal": "115.830,00",
+    "billing_10_amountTotal": "112.860,00",
+    "billing_9_amountTotal": "127.480,00",
+    "billing_8_amountTotal": "120.060,00",
+    "billing_7_amountTotal": "112.860,00",
+    "billing_6_amountTotal": "127.440,00",
+    "billing_5_amountTotal": "124.008,00",
+    "billing_4_amountTotal": "126.360,00",
+    "billing_3_amountTotal": "113.520,00",
+    "billing_2_amountTotal": "116.160,00",
+    "billing_1_amountTotal": "115.830,00",
 
-    "billing_11_paymentDate": "20201221",
-    "billing_10_paymentDate": "20210123",
-    "billing_9_paymentDate": "20210225",
-    "billing_8_paymentDate": "20210316",
-    "billing_7_paymentDate": "20210403",
-    "billing_6_paymentDate": "20210503",
-    "billing_5_paymentDate": "20210606",
-    "billing_4_paymentDate": "20210706",
-    "billing_3_paymentDate": "20210819",
-    "billing_2_paymentDate": "20210906",
+    "billing_10_paymentDate": "20201221",
+    "billing_9_paymentDate": "20210123",
+    "billing_8_paymentDate": "20210225",
+    "billing_7_paymentDate": "20210316",
+    "billing_6_paymentDate": "20210403",
+    "billing_5_paymentDate": "20210503",
+    "billing_4_paymentDate": "20210606",
+    "billing_3_paymentDate": "20210706",
+    "billing_2_paymentDate": "20210819",
+    "billing_1_paymentDate": "20210906",
 }
 ```
 dan untuk URL API mengunakan format sebagai berikut
@@ -143,7 +142,7 @@ API akan mengembalikan variabel Percentage dan Predict Description beserta value
 ## Hasil Retun API
 ```
 {
-    "Percentage": 98.99,
+    "Percentage": 100,
     "Predict Description": "Loyal"
 }
 ```
