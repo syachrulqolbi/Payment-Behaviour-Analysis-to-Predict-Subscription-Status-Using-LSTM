@@ -12,6 +12,7 @@ model = tf.keras.models.load_model("model_lstm.h5")
 sc = joblib.load("scaler.gz")
 sc_pd = joblib.load("scaler_pd.gz")
 sc_stat = joblib.load("scaler_stat.gz")
+sc_mean = joblib.load("scaler_mean.gz")
 
 class Data(BaseModel):
     billing_10_amountTotal: str
@@ -177,23 +178,27 @@ def predict(data: Data):
     data = np.array([data])
     
     data2 = [convert_LTV(status[0], status[1], status[2], status[3], status[4], status[5], status[6], status[7], status[8], status[9]), 
-             convert_status_index(status[0], status[1], status[2], status[3], status[4], status[5], status[6], status[7], status[8], status[9])]
+             np.mean(data[:, :, 0])]
     data2 = np.array([data2])
 
     data[:, :, 0] = data[:, :, 0] - data[:, :, 0].mean(axis = 1)
+
     data[:, :, 0] = sc.transform(data[:, :, 0])
     data[:, :, 1] = sc_pd.transform(data[:, :, 1])
     data[:, :, 2] = sc_stat.transform(data[:, :, 2])
 
-    result = model.predict([data, data2])[0][0]
+    data2[:, 1] = sc_mean.transform(data2[:, 1].reshape(-1, 1)).reshape(data2.shape[0])
 
-    if result <= 0.13701576:
+    result = model.predict([data[:, :, 0:1], data[:, :, 1:2], data[:, :, 2:3], data2[:]]).argmax(axis = 1) * 0.025
+    print(result)
+
+    if result < 0.25:
         status = "Churn"
-    elif result > 0.13701576 and result <= 0.3460211:
+    elif result >= 0.25 and result < 0.45:
         status = "Cenderung Churn"
-    elif result > 0.3460211 and result <= 0.5993076:
+    elif result >= 0.45 and result < 0.65:
         status = "Ragu-ragu"
-    elif result > 0.5993076 and result <= 0.8439841:
+    elif result >= 0.565 and result < 0.85:
         status = "Agak Loyal"
     else:
         status = "Loyal"
