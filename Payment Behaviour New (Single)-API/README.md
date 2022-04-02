@@ -54,17 +54,17 @@ These are the results for our models.
   </tr>
   <tr>
     <td class="tg-c3ow">Unsubscribe</td>
-    <td class="tg-c3ow">96.70%</td>
-    <td class="tg-c3ow">86.40%</td>
-    <td class="tg-c3ow">93.90%</td>
-    <td class="tg-c3ow">89.99%</td>
+    <td class="tg-c3ow">94.96%</td>
+    <td class="tg-c3ow">73.00%</td>
+    <td class="tg-c3ow">86.39%</td>
+    <td class="tg-c3ow">79.14%</td>
   </tr>
   <tr>
     <td class="tg-c3ow">Subscribe</td>
-    <td class="tg-c3ow">96.70%</td>
-    <td class="tg-c3ow">98.84%</td>
-    <td class="tg-c3ow">97.23%</td>
-    <td class="tg-c3ow">98.02%</td>
+    <td class="tg-c3ow">94.96%</td>
+    <td class="tg-c3ow">98.27%</td>
+    <td class="tg-c3ow">96.03%</td>
+    <td class="tg-c3ow">97.14%</td>
   </tr>
 </table></div>
 
