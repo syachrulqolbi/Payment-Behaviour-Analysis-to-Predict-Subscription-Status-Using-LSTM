@@ -129,7 +129,7 @@ Kita akan memprediksi status berlangganan user, apakah user tersebut akan berlan
     "billing_4_paymentDate": "20210606",
     "billing_3_paymentDate": "20210706",
     "billing_2_paymentDate": "20210819",
-    "billing_1_paymentDate": "20210906",
+    "billing_1_paymentDate": "20210906"
 }
 ```
 dan untuk URL API mengunakan format sebagai berikut
