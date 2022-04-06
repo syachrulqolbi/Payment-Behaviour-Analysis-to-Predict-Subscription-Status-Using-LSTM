@@ -109,27 +109,27 @@ Kita akan memprediksi status berlangganan user, apakah user tersebut akan berlan
 
 ```
 {
-    "billing_10_amountTotal": "112.860,00",
-    "billing_9_amountTotal": "127.480,00",
-    "billing_8_amountTotal": "120.060,00",
-    "billing_7_amountTotal": "112.860,00",
-    "billing_6_amountTotal": "127.440,00",
-    "billing_5_amountTotal": "124.008,00",
-    "billing_4_amountTotal": "126.360,00",
-    "billing_3_amountTotal": "113.520,00",
-    "billing_2_amountTotal": "116.160,00",
-    "billing_1_amountTotal": "115.830,00",
+    "billing_10_amountTotal": "000.000,00",
+    "billing_9_amountTotal": "000.000,00",
+    "billing_8_amountTotal": "000.000,00",
+    "billing_7_amountTotal": "000.000,00",
+    "billing_6_amountTotal": "000.000,00",
+    "billing_5_amountTotal": "000.000,00",
+    "billing_4_amountTotal": "550.000,00",
+    "billing_3_amountTotal": "151.340,00",
+    "billing_2_amountTotal": "393.750,00",
+    "billing_1_amountTotal": "378.000,00",
 
-    "billing_10_paymentDate": "20201221",
-    "billing_9_paymentDate": "20210123",
-    "billing_8_paymentDate": "20210225",
-    "billing_7_paymentDate": "20210316",
-    "billing_6_paymentDate": "20210403",
-    "billing_5_paymentDate": "20210503",
-    "billing_4_paymentDate": "20210606",
-    "billing_3_paymentDate": "20210706",
-    "billing_2_paymentDate": "20210819",
-    "billing_1_paymentDate": "20210906"
+    "billing_10_paymentDate": "20201200",
+    "billing_9_paymentDate": "20210100",
+    "billing_8_paymentDate": "20210200",
+    "billing_7_paymentDate": "20210300",
+    "billing_6_paymentDate": "20210400",
+    "billing_5_paymentDate": "20210500",
+    "billing_4_paymentDate": "20210621",
+    "billing_3_paymentDate": "20210713",
+    "billing_2_paymentDate": "20210800",
+    "billing_1_paymentDate": "20210900"
 }
 ```
 dan untuk URL API mengunakan format sebagai berikut
@@ -142,8 +142,12 @@ API akan mengembalikan variabel Percentage dan Predict Description beserta value
 ## Hasil Retun API
 ```
 {
-    "Percentage": 98.89,
-    "Predict Description": "Loyal"
+    "Percentage": 17.02,
+    "Predict Description": "Churn",
+    "Amount Total Predict Description": "-",
+    "Payment Date Predict Description": "Pola Data Churn",
+    "Status Predict Description": "Pola Data Churn",
+    "Activity Description": "Tidak Aktif 2 Bulan Terakhir"
 }
 ```
 ## Contoh mengunakan POSTMAN
