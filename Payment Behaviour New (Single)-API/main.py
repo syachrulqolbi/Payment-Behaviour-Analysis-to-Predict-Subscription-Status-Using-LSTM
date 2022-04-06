@@ -8,7 +8,10 @@ from sklearn.preprocessing import StandardScaler
 
 app = FastAPI()
 
-model = tf.keras.models.load_model("model_lstm.h5")
+model = tf.keras.models.load_model("model_lstm_bagging.h5")
+model_A = tf.keras.models.load_model("model_lstm_amounttotal.h5")
+model_B = tf.keras.models.load_model("model_lstm_paymentdate.h5")
+model_C = tf.keras.models.load_model("model_lstm_status.h5")
 sc = joblib.load("scaler.gz")
 sc_pd = joblib.load("scaler_pd.gz")
 sc_stat = joblib.load("scaler_stat.gz")
@@ -135,6 +138,22 @@ def convert_status_index(billing_10, billing_9, billing_8, billing_7, billing_6,
     
     return count
 
+def convert_churn_index(billing_2, billing_1):
+    if billing_2 == 0 and billing_1 == 0:
+        return 0
+    else:
+        return 1
+
+def convert_predict(predict):
+    temp_arg = predict.argmax(axis = 1)
+    temp_max = predict.max(axis = 1)
+    temp_mul = np.where(temp_arg == 1, 0.25, np.where(temp_arg == 4, 0.15, 0.20))
+    temp = temp_mul * temp_max
+    temp_arg = np.where(temp_arg == 0, 0, np.where(temp_arg == 1, 0.25, np.where(temp_arg == 2, 0.45, np.where(temp_arg == 3, 0.65, 0.85))))
+    predict = temp + temp_arg
+
+    return predict
+
 @app.get("/predict")
 def predict(data: Data):
     amountTotal = [data.billing_10_amountTotal,
@@ -178,7 +197,8 @@ def predict(data: Data):
     data = np.array([data])
     
     data2 = [convert_LTV(status[0], status[1], status[2], status[3], status[4], status[5], status[6], status[7], status[8], status[9]), 
-             np.mean(data[:, :, 0])]
+             np.mean(data[:, :, 0]),
+	     convert_churn_index(data[:, :, 1][0][8], data[:, :, 1][0][9])]
     data2 = np.array([data2])
 
     data[:, :, 0] = data[:, :, 0] - data[:, :, 0].mean(axis = 1)
@@ -189,8 +209,12 @@ def predict(data: Data):
 
     data2[:, 1] = sc_mean.transform(data2[:, 1].reshape(-1, 1)).reshape(data2.shape[0])
 
-    result = model.predict([data[:, :, 0:1], data[:, :, 1:2], data[:, :, 2:3], data2[:]]).argmax(axis = 1) * 0.025
-    print(result)
+    lstm_A_test = model_A.predict([data[:, :, 0:1]])
+    lstm_B_test = model_B.predict([data[:, :, 1:2]])
+    lstm_C_test = model_C.predict([data[:, :, 2:3]])
+    
+    predict = model.predict(np.concatenate((np.concatenate((np.concatenate((data2, lstm_A_test), axis = 1), lstm_B_test), axis = 1), lstm_C_test), axis = 1))
+    result = convert_predict(predict)
 
     if result < 0.25:
         status = "Churn"
@@ -205,5 +229,9 @@ def predict(data: Data):
     
     return {
         "Percentage": round(float(result), 4) * 100,
-        "Predict Description" : status
+        "Predict Description" : status,
+        "Amount Total Predict Description" : "Pola Data Churn" if lstm_A_test < 0.25 else "-",
+        "Payment Date Predict Description" : "Pola Data Churn" if lstm_B_test < 0.25 else "-",
+        "Status Predict Description" : "Pola Data Churn" if lstm_C_test < 0.25 else "-",
+        "Activity Description" : "Tidak Aktif 2 Bulan Terakhir" if data2[:, 2] == 0 else "-"
     }
