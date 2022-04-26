@@ -5,6 +5,8 @@ import numpy as np
 import pickle
 import joblib
 from sklearn.preprocessing import StandardScaler
+from datetime import datetime
+from scipy.interpolate import interp1d
 
 app = FastAPI()
 
@@ -40,6 +42,17 @@ class Data(BaseModel):
     billing_2_paymentDate: str
     billing_1_paymentDate: str
 
+    billing_10_period: str
+    billing_9_period: str
+    billing_8_period: str
+    billing_7_period: str
+    billing_6_period: str
+    billing_5_period: str
+    billing_4_period: str
+    billing_3_period: str
+    billing_2_period: str
+    billing_1_period: str
+
 def convert_LTV(billing_10, billing_9, billing_8, billing_7, billing_6, billing_5, billing_4, billing_3, billing_2, billing_1):
     if billing_10 != 0:
         return 10
@@ -64,95 +77,13 @@ def convert_LTV(billing_10, billing_9, billing_8, billing_7, billing_6, billing_
     else:
         return 0
 
-def convert_status_index(billing_10, billing_9, billing_8, billing_7, billing_6, billing_5, billing_4, billing_3, billing_2, billing_1):
-    count = 0
-    if billing_10 == 1:
-        count += 1
-    elif billing_10 == 2:
-        count += 2
-    else:
-        count += 0
-    
-    if billing_9 == 1:
-        count += 1
-    elif billing_9 == 2:
-        count += 2
-    else:
-        count += 0
-    
-    if billing_8 == 1:
-        count += 1
-    elif billing_8 == 2:
-        count += 2
-    else:
-        count += 0
-    
-    if billing_7 == 1:
-        count += 1
-    elif billing_7 == 2:
-        count += 2
-    else:
-        count += 0
-    
-    if billing_6 == 1:
-        count += 1
-    elif billing_6 == 2:
-        count += 2
-    else:
-        count += 0
-      
-    if billing_5 == 1:
-        count += 1
-    elif billing_5 == 2:
-        count += 2
-    else:
-        count += 0
-    
-    if billing_4 == 1:
-        count += 1
-    elif billing_4 == 2:
-        count += 2
-    else:
-        count += 0
-    
-    if billing_3 == 1:
-        count += 1
-    elif billing_3 == 2:
-        count += 2
-    else:
-        count += 0
-
-    if billing_2 == 1:
-        count += 1
-    elif billing_2 == 2:
-        count += 2
-    else:
-        count += 0
-    
-    if billing_1 == 1:
-        count += 1
-    elif billing_1 == 2:
-        count += 2
-    else:
-        count += 0
-    
-    return count
-
-def convert_churn_index(billing_2, billing_1):
-    if billing_2 == 0 and billing_1 == 0:
+def convert_churn_index(billing_3, billing_2, billing_1):
+    if int(datetime.today().strftime("%d")) > 20 and billing_2 == 0 and billing_1 == 0:
+        return 0
+    elif int(datetime.today().strftime("%d")) <= 20 and billing_3 == 0 and billing_2 == 0:
         return 0
     else:
         return 1
-
-def convert_predict(predict):
-    temp_arg = predict.argmax(axis = 1)
-    temp_max = predict.max(axis = 1)
-    temp_mul = np.where(temp_arg == 1, 0.25, np.where(temp_arg == 4, 0.15, 0.20))
-    temp = temp_mul * temp_max
-    temp_arg = np.where(temp_arg == 0, 0, np.where(temp_arg == 1, 0.25, np.where(temp_arg == 2, 0.45, np.where(temp_arg == 3, 0.65, 0.85))))
-    predict = temp + temp_arg
-
-    return predict
 
 @app.get("/predict")
 def predict(data: Data):
@@ -176,12 +107,22 @@ def predict(data: Data):
                    data.billing_3_paymentDate,
                    data.billing_2_paymentDate,
                    data.billing_1_paymentDate]
+    period = [data.billing_10_period,
+              data.billing_9_period,
+              data.billing_8_period,
+              data.billing_7_period,
+              data.billing_6_period,
+              data.billing_5_period,
+              data.billing_4_period,
+              data.billing_3_period,
+              data.billing_2_period,
+              data.billing_1_period]
     status = []
 
     for i in range(10):
-        amountTotal[i] = float(amountTotal[i].replace(".", "").replace(",", "."))
-        paymentDate[i] = int(paymentDate[i][-2:])
-        status.append(2 if paymentDate[i] >= 1 and paymentDate[i] < 22 else (1 if paymentDate[i] >= 22 and paymentDate[i] < 32 else 0))
+        paymentDate[i] = int(paymentDate[i][-2:]) if int(paymentDate[i][-4:-2]) == int(period[i][-2:]) and int(paymentDate[i][-2:]) != 0 else (int(32) if int(paymentDate[i][-2:]) == 0 else int(31))
+        status.append(3 if paymentDate[i] >= 1 and paymentDate[i] < 11 else (2 if paymentDate[i] >= 11 and paymentDate[i] < 22 else (1 if paymentDate[i] >= 22 and paymentDate[i] < 32 else 0)))
+        amountTotal[i] = float(amountTotal[i].replace(".", "").replace(",", ".")) if paymentDate[i] != 32 else float(0)
 
     data = [[amountTotal[0], paymentDate[0], status[0]],
             [amountTotal[1], paymentDate[1], status[1]],
@@ -197,11 +138,63 @@ def predict(data: Data):
     data = np.array([data])
     
     data2 = [convert_LTV(status[0], status[1], status[2], status[3], status[4], status[5], status[6], status[7], status[8], status[9]), 
-             np.mean(data[:, :, 0]),
-	     convert_churn_index(data[:, :, 1][0][8], data[:, :, 1][0][9])]
+             sum(amountTotal) / len(amountTotal),
+             convert_churn_index(status[7], status[8], status[9])]
     data2 = np.array([data2])
 
+    print(data.astype(int))
+    print(data2.astype(int))
+
+    if data2[0, 0] < 10 and data2[0, 0] > 1:
+        if int(datetime.today().strftime("%d")) <= 20 and data[:, :, 1][0][9] == 0:
+            x_temp = np.linspace(1, int(data2[0, 0] - 1), num = int(data2[0, 0] - 1), endpoint = True)
+            xnew = np.linspace(1, int(data2[0, 0] - 1), num = 10, endpoint = True)
+
+            #amountTotal
+            y_temp = data[0, -int(data2[0, 0]):-1, 0]
+            f = interp1d(x_temp, y_temp, kind = "linear")
+            data[0, :, 0] = f(xnew)
+
+            #paymentDate
+            y_temp = data[0, -int(data2[0, 0]):-1, 1]
+            f = interp1d(x_temp, y_temp, kind = "linear")
+            data[0, :, 1] = f(xnew)
+
+            #status
+            y_temp = data[0, -int(data2[0, 0]):-1, 2]
+            f = interp1d(x_temp, y_temp, kind = "linear")
+            data[0, :, 2] = f(xnew)
+        else:
+            x_temp = np.linspace(1, int(data2[0, 0]), num = int(data2[0, 0]), endpoint = True)
+            xnew = np.linspace(1, int(data2[0, 0]), num = 10, endpoint = True)
+
+            #amountTotal
+            y_temp = data[0, -int(data2[0, 0]):, 0]
+            f = interp1d(x_temp, y_temp, kind = "linear")
+            data[0, :, 0] = f(xnew)
+
+            #paymentDate
+            y_temp = data[0, -int(data2[0, 0]):, 1]
+            f = interp1d(x_temp, y_temp, kind = "linear")
+            data[0, :, 1] = f(xnew)
+
+            #status
+            y_temp = data[0, -int(data2[0, 0]):, 2]
+            f = interp1d(x_temp, y_temp, kind = "linear")
+            data[0, :, 2] = f(xnew)
+
+    elif data2[0, 0] == 1:
+        #amountTotal
+        data[0, i, 0] = np.array([data[0, -1, 0] for i in range(10)])
+
+        #paymentDate
+        data[0, i, 1] = np.array([data[0, -1, 1] for i in range(10)])
+
+        #status
+        data[0, i, 2] = np.array([data[0, -1, 2] for i in range(10)])
+
     data[:, :, 0] = data[:, :, 0] - data[:, :, 0].mean(axis = 1)
+    data[:, :, 1] = data[:, :, 1] - data[:, :, 1].mean(axis = 1)
 
     data[:, :, 0] = sc.transform(data[:, :, 0])
     data[:, :, 1] = sc_pd.transform(data[:, :, 1])
@@ -209,12 +202,15 @@ def predict(data: Data):
 
     data2[:, 1] = sc_mean.transform(data2[:, 1].reshape(-1, 1)).reshape(data2.shape[0])
 
-    lstm_A_test = model_A.predict([data[:, :, 0:1]])
-    lstm_B_test = model_B.predict([data[:, :, 1:2]])
-    lstm_C_test = model_C.predict([data[:, :, 2:3]])
+    lstm_A_test = model_A.predict([data[:, :, 0], data2])
+    lstm_B_test = model_B.predict([data[:, :, 1], np.concatenate((data2[:, 0:1], data2[:, 2:3]), axis = 1)])
+    lstm_C_test = model_C.predict([data[:, :, 2], np.concatenate((data2[:, 0:1], data2[:, 2:3]), axis = 1)])
+
+    print(lstm_A_test)
+    print(lstm_B_test)
+    print(lstm_C_test)
     
-    predict = model.predict(np.concatenate((np.concatenate((np.concatenate((data2, lstm_A_test), axis = 1), lstm_B_test), axis = 1), lstm_C_test), axis = 1))
-    result = convert_predict(predict)
+    result = model.predict(np.concatenate((np.concatenate((lstm_A_test, lstm_B_test), axis = 1), lstm_C_test), axis = 1))
 
     if result < 0.25:
         status = "Churn"
@@ -222,7 +218,7 @@ def predict(data: Data):
         status = "Cenderung Churn"
     elif result >= 0.45 and result < 0.65:
         status = "Ragu-ragu"
-    elif result >= 0.565 and result < 0.85:
+    elif result >= 0.65 and result < 0.85:
         status = "Agak Loyal"
     else:
         status = "Loyal"
@@ -232,6 +228,6 @@ def predict(data: Data):
         "Predict Description" : status,
         "Amount Total Predict Description" : "Pola Data Churn" if lstm_A_test < 0.25 else "-",
         "Payment Date Predict Description" : "Pola Data Churn" if lstm_B_test < 0.25 else "-",
-        "Status Predict Description" : "Pola Data Churn" if lstm_C_test < 0.25 else "-",
+        "Loyality Description" : "Loyal" if lstm_C_test >= 0.85 else ("Agak Loyal" if (lstm_C_test >= 0.65 and lstm_C_test < 0.85) else "Telat Bayar"),
         "Activity Description" : "Tidak Aktif 2 Bulan Terakhir" if data2[:, 2] == 0 else "-"
     }
