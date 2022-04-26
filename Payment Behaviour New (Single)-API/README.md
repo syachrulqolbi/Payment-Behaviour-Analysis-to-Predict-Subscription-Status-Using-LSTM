@@ -24,6 +24,7 @@ Tested with
 * Numpy 1.19.5
 * Matplotlib 3.2.2
 * Pandas 1.1.5
+* Scipy 1.8.0
 
 Additional requirements to generate dataset:
 
@@ -110,26 +111,37 @@ Kita akan memprediksi status berlangganan user, apakah user tersebut akan berlan
 ```
 {
     "billing_10_amountTotal": "000.000,00",
-    "billing_9_amountTotal": "000.000,00",
-    "billing_8_amountTotal": "000.000,00",
-    "billing_7_amountTotal": "000.000,00",
-    "billing_6_amountTotal": "000.000,00",
-    "billing_5_amountTotal": "000.000,00",
-    "billing_4_amountTotal": "550.000,00",
-    "billing_3_amountTotal": "151.340,00",
-    "billing_2_amountTotal": "393.750,00",
-    "billing_1_amountTotal": "378.000,00",
+    "billing_9_amountTotal": "781.000,00",
+    "billing_8_amountTotal": "781.000,00",
+    "billing_7_amountTotal": "806.300,00",
+    "billing_6_amountTotal": "665.500,00",
+    "billing_5_amountTotal": "665.500,00",
+    "billing_4_amountTotal": "665.500,00",
+    "billing_3_amountTotal": "665.500,00",
+    "billing_2_amountTotal": "665.500,00",
+    "billing_1_amountTotal": "000.000,00",
 
-    "billing_10_paymentDate": "20201200",
-    "billing_9_paymentDate": "20210100",
-    "billing_8_paymentDate": "20210200",
-    "billing_7_paymentDate": "20210300",
-    "billing_6_paymentDate": "20210400",
-    "billing_5_paymentDate": "20210500",
-    "billing_4_paymentDate": "20210621",
-    "billing_3_paymentDate": "20210713",
-    "billing_2_paymentDate": "20210800",
-    "billing_1_paymentDate": "20210900"
+    "billing_10_paymentDate": "20210100",
+    "billing_9_paymentDate": "20210221",
+    "billing_8_paymentDate": "20210325",
+    "billing_7_paymentDate": "20210421",
+    "billing_6_paymentDate": "20210523",
+    "billing_5_paymentDate": "20210624",
+    "billing_4_paymentDate": "20210715",
+    "billing_3_paymentDate": "20210929",
+    "billing_2_paymentDate": "20210928",
+    "billing_1_paymentDate": "20211000",
+
+    "billing_10_period": "202101",
+    "billing_9_period": "202102",
+    "billing_8_period": "202103",
+    "billing_7_period": "202104",
+    "billing_6_period": "202105",
+    "billing_5_period": "202106",
+    "billing_4_period": "202107",
+    "billing_3_period": "202108",
+    "billing_2_period": "202109",
+    "billing_1_period": "202110"
 }
 ```
 dan untuk URL API mengunakan format sebagai berikut
@@ -142,12 +154,12 @@ API akan mengembalikan variabel Percentage dan Predict Description beserta value
 ## Hasil Retun API
 ```
 {
-    "Percentage": 17.02,
+    "Percentage": 7.01,
     "Predict Description": "Churn",
-    "Amount Total Predict Description": "-",
-    "Payment Date Predict Description": "Pola Data Churn",
-    "Status Predict Description": "Pola Data Churn",
-    "Activity Description": "Tidak Aktif 2 Bulan Terakhir"
+    "Amount Total Predict Description": "Pola Data Churn",
+    "Payment Date Predict Description": "-",
+    "Loyality Description": "Telat Bayar",
+    "Activity Description": "-"
 }
 ```
 ## Contoh mengunakan POSTMAN
