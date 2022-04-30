@@ -138,12 +138,10 @@ def predict(data: Data):
     data = np.array([data])
     
     data2 = [convert_LTV(status[0], status[1], status[2], status[3], status[4], status[5], status[6], status[7], status[8], status[9]), 
-             sum(amountTotal) / len(amountTotal),
+             #sum(amountTotal) / len(amountTotal),
+             sum(i for i in amountTotal if i != 0) / len([i for i in amountTotal if i != 0]),
              convert_churn_index(status[7], status[8], status[9])]
     data2 = np.array([data2])
-
-    print(data.astype(int))
-    print(data2.astype(int))
 
     if data2[0, 0] < 10 and data2[0, 0] > 1:
         if int(datetime.today().strftime("%d")) <= 20 and data[:, :, 1][0][9] == 0:
@@ -185,32 +183,37 @@ def predict(data: Data):
 
     elif data2[0, 0] == 1:
         #amountTotal
-        data[0, i, 0] = np.array([data[0, -1, 0] for i in range(10)])
+        data[0, :, 0] = np.array([data[0, -1, 0] for j in range(10)])
 
         #paymentDate
-        data[0, i, 1] = np.array([data[0, -1, 1] for i in range(10)])
+        data[0, :, 1] = np.array([data[0, -1, 1] for j in range(10)])
 
         #status
-        data[0, i, 2] = np.array([data[0, -1, 2] for i in range(10)])
+        data[0, :, 2] = np.array([data[0, -1, 2] for j in range(10)])
 
     data[:, :, 0] = data[:, :, 0] - data[:, :, 0].mean(axis = 1)
     data[:, :, 1] = data[:, :, 1] - data[:, :, 1].mean(axis = 1)
 
-    data[:, :, 0] = sc.transform(data[:, :, 0])
-    data[:, :, 1] = sc_pd.transform(data[:, :, 1])
-    data[:, :, 2] = sc_stat.transform(data[:, :, 2])
+    #data[:, :, 0] = sc.transform(data[:, :, 0])
+    #data[:, :, 1] = sc_pd.transform(data[:, :, 1])
+    #data[:, :, 2] = sc_stat.transform(data[:, :, 2])
+
+    for i in range(10):
+        data[:, i, 0] = sc.transform(data[:, i, 0].reshape(-1, 1)).reshape(-1)
+
+    for i in range(10):
+        data[:, i, 1] = sc_pd.transform(data[:, i, 1].reshape(-1, 1)).reshape(-1)
+
+    for i in range(10):
+        data[:, i, 2] = sc_stat.transform(data[:, i, 2].reshape(-1, 1)).reshape(-1)
 
     data2[:, 1] = sc_mean.transform(data2[:, 1].reshape(-1, 1)).reshape(data2.shape[0])
 
     lstm_A_test = model_A.predict([data[:, :, 0], data2])
     lstm_B_test = model_B.predict([data[:, :, 1], np.concatenate((data2[:, 0:1], data2[:, 2:3]), axis = 1)])
     lstm_C_test = model_C.predict([data[:, :, 2], np.concatenate((data2[:, 0:1], data2[:, 2:3]), axis = 1)])
-
-    print(lstm_A_test)
-    print(lstm_B_test)
-    print(lstm_C_test)
     
-    result = model.predict(np.concatenate((np.concatenate((lstm_A_test, lstm_B_test), axis = 1), lstm_C_test), axis = 1))
+    result = model.predict([np.concatenate((np.concatenate((lstm_A_test, lstm_B_test), axis = 1), lstm_C_test), axis = 1), np.concatenate((data2[:, 0:1], data2[:, 2:3]), axis = 1)])
 
     if result < 0.25:
         status = "Churn"

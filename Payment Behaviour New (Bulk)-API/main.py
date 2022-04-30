@@ -27,30 +27,30 @@ model_C = tf.keras.models.load_model("model_lstm_status.h5")
 def convert_paymentDate(paymentDate, period):
     if paymentDate == 0:
         paymentDate = paymentDate
-    elif str(paymentDate)[3:6] == "Jan" and str(period)[-2:] != "01":
-        paymentDate = "31" + paymentDate[2:]
-    elif str(paymentDate)[3:6] == "Feb" and str(period)[-2:] != "02":
-        paymentDate = "31" + paymentDate[2:]
-    elif str(paymentDate)[3:6] == "Mar" and str(period)[-2:] != "03":
-        paymentDate = "31" + paymentDate[2:]
-    elif str(paymentDate)[3:6] == "Apr" and str(period)[-2:] != "04":
-        paymentDate = "31" + paymentDate[2:]
-    elif str(paymentDate)[3:6] == "May" and str(period)[-2:] != "05":
-        paymentDate = "31" + paymentDate[2:]
-    elif str(paymentDate)[3:6] == "Jun" and str(period)[-2:] != "06":
-        paymentDate = "31" + paymentDate[2:]
-    elif str(paymentDate)[3:6] == "Jul" and str(period)[-2:] != "07":
-        paymentDate = "31" + paymentDate[2:]
-    elif str(paymentDate)[3:6] == "Aug" and str(period)[-2:] != "08":
-        paymentDate = "31" + paymentDate[2:]
-    elif str(paymentDate)[3:6] == "Sep" and str(period)[-2:] != "09":
-        paymentDate = "31" + paymentDate[2:]
-    elif str(paymentDate)[3:6] == "Oct" and str(period)[-2:] != "10":
-        paymentDate = "31" + paymentDate[2:]
-    elif str(paymentDate)[3:6] == "Nov" and str(period)[-2:] != "11":
-        paymentDate = "31" + paymentDate[2:]
-    elif str(paymentDate)[3:6] == "Dec" and str(period)[-2:] != "12":
-        paymentDate = "31" + paymentDate[2:]
+    elif str(paymentDate).split("-")[1] == "Jan" and str(period)[-2:] != "01":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
+    elif str(paymentDate).split("-")[1] == "Feb" and str(period)[-2:] != "02":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
+    elif str(paymentDate).split("-")[1] == "Mar" and str(period)[-2:] != "03":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
+    elif str(paymentDate).split("-")[1] == "Apr" and str(period)[-2:] != "04":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
+    elif str(paymentDate).split("-")[1] == "May" and str(period)[-2:] != "05":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
+    elif str(paymentDate).split("-")[1] == "Jun" and str(period)[-2:] != "06":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
+    elif str(paymentDate).split("-")[1] == "Jul" and str(period)[-2:] != "07":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
+    elif str(paymentDate).split("-")[1] == "Aug" and str(period)[-2:] != "08":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
+    elif str(paymentDate).split("-")[1] == "Sep" and str(period)[-2:] != "09":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
+    elif str(paymentDate).split("-")[1] == "Oct" and str(period)[-2:] != "10":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
+    elif str(paymentDate).split("-")[1] == "Nov" and str(period)[-2:] != "11":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
+    elif str(paymentDate).split("-")[1] == "Dec" and str(period)[-2:] != "12":
+        paymentDate = "31" + "-" + str(paymentDate).split("-")[1] + "-" + str(paymentDate).split("-")[2]
 
     return paymentDate
 
@@ -93,7 +93,7 @@ def shift(a):
         return "ZERO BILLING"
 
 def convert_churn_index(billing_2, billing_1):
-    if billing_2 == 0 and billing_1 == 0:
+    if billing_2 == 32 and billing_1 == 32:
         return 0
     else:
         return 1
@@ -259,8 +259,7 @@ def predict(url: str = Form(...)):
     
     for month in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
         df["billing_{}_paymentDate".format(month)].loc[df["billing_{}_paymentDate".format(month)].isnull()] = 0
-        df["billing_{}_paymentDate".format(month)] = df["billing_{}_paymentDate".format(month)].apply(lambda x: str(x)[:-7])
-        df["billing_{}_paymentDate".format(month)].loc[df["billing_{}_paymentDate".format(month)] == ""] = 0
+        df["billing_{}_paymentDate".format(month)] = df["billing_{}_paymentDate".format(month)].apply(lambda x: str(x).split("-")[0])
         df["billing_{}_paymentDate".format(month)] = df["billing_{}_paymentDate".format(month)].astype(int)
         df["billing_{}_paymentDate".format(month)] = df["billing_{}_paymentDate".format(month)].apply(lambda x: 32 if x == 0 else x)
         df["billing_{}_amountTotal".format(month)].loc[df["billing_{}_amountTotal".format(month)].isnull()] = 0
@@ -289,7 +288,7 @@ def predict(url: str = Form(...)):
                                                                       x["billing_2_status"], 
                                                                       x["billing_1_status"]), axis = 1)
     df["churn_index"] = df.apply(lambda x: convert_churn_index(x["billing_2_paymentDate"], 
-                                                                   x["billing_1_paymentDate"]), axis = 1)
+                                                               x["billing_1_paymentDate"]), axis = 1)
     df["mean"] = df[["billing_10_amountTotal",
                      "billing_9_amountTotal",
                      "billing_8_amountTotal",
@@ -299,7 +298,7 @@ def predict(url: str = Form(...)):
                      "billing_4_amountTotal",
                      "billing_3_amountTotal",
                      "billing_2_amountTotal",
-                     "billing_1_amountTotal"]].mean(axis = 1).values
+                     "billing_1_amountTotal"]].replace(0, np.NaN).mean(axis = 1).values
 
     data = np.reshape(df[["billing_10_amountTotal", "billing_10_paymentDate", "billing_10_status", "LTV", "mean", "churn_index",
                           "billing_9_amountTotal", "billing_9_paymentDate", "billing_9_status", "LTV", "mean", "churn_index",
@@ -335,20 +334,25 @@ def predict(url: str = Form(...)):
 
         elif data[i, 0, 3] == 1:
             #amountTotal
-            data[i, :, 0] = np.array([data[i, -1, 0] for i in range(10)])
+            data[i, :, 0] = np.array([data[i, -1, 0] for j in range(10)])
 
             #paymentDate
-            data[i, :, 1] = np.array([data[i, -1, 1] for i in range(10)])
+            data[i, :, 1] = np.array([data[i, -1, 1] for j in range(10)])
 
             #status
-            data[i, :, 2] = np.array([data[i, -1, 2] for i in range(10)])
+            data[i, :, 2] = np.array([data[i, -1, 2] for j in range(10)])
     
     data[:, :, 0] = data[:, :, 0] - data[:, :, 0].mean(axis = 1).reshape(-1, 1)
     data[:, :, 1] = data[:, :, 1] - data[:, :, 1].mean(axis = 1).reshape(-1, 1)
 
-    data[:, :, 0] = sc.transform(data[:, :, 0])
-    data[:, :, 1] = sc_pd.transform(data[:, :, 1])
-    data[:, :, 2] = sc_stat.transform(data[:, :, 2])
+    for i in range(10):
+        data[:, i, 0] = sc.transform(data[:, i, 0].reshape(-1, 1)).reshape(-1)
+
+    for i in range(10):
+        data[:, i, 1] = sc_pd.transform(data[:, i, 1].reshape(-1, 1)).reshape(-1)
+
+    for i in range(10):
+        data[:, i, 2] = sc_stat.transform(data[:, i, 2].reshape(-1, 1)).reshape(-1)
 
     data = np.array(data)
     data = np.reshape(data, (data.shape[0], data.shape[1], data.shape[2]))
@@ -359,7 +363,7 @@ def predict(url: str = Form(...)):
     lstm_B_test = model_B.predict([data[:, :, 1], np.concatenate((data2[:, 0:1], data2[:, 2:3]), axis = 1)])
     lstm_C_test = model_C.predict([data[:, :, 2], np.concatenate((data2[:, 0:1], data2[:, 2:3]), axis = 1)])
 
-    predict = model.predict(np.concatenate((np.concatenate((lstm_A_test, lstm_B_test), axis = 1), lstm_C_test), axis = 1))
+    predict = model.predict([np.concatenate((np.concatenate((lstm_A_test, lstm_B_test), axis = 1), lstm_C_test), axis = 1), np.concatenate((data2[:, 0:1], data2[:, 2:3]), axis = 1)])
     predict_temp = predict
     predict = np.where(predict_temp >= 0.85, "Loyal", np.where(predict_temp >= 0.65, "Agak Loyal", np.where(predict_temp >= 0.45, "Telat Bayar", np.where(predict_temp >= 0.25, "Cenderung Churn", "Churn"))))
 
