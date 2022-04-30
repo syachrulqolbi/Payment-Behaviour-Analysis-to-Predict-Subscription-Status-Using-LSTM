@@ -154,9 +154,9 @@ API akan mengembalikan variabel Percentage dan Predict Description beserta value
 ## Hasil Retun API
 ```
 {
-    "Percentage": 7.01,
+    "Percentage": 20.8,
     "Predict Description": "Churn",
-    "Amount Total Predict Description": "Pola Data Churn",
+    "Amount Total Predict Description": "-",
     "Payment Date Predict Description": "-",
     "Loyality Description": "Telat Bayar",
     "Activity Description": "-"
