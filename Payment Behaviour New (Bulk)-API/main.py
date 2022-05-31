@@ -122,100 +122,6 @@ def convert_LTV(billing_10, billing_9, billing_8, billing_7, billing_6, billing_
     else:
         return 0
 
-def convert_status_index(billing_10, billing_9, billing_8, billing_7, billing_6, billing_5, billing_4, billing_3, billing_2, billing_1):
-    count = 0
-    if billing_10 == "LATE PAID":
-        count += 1
-    elif billing_10 == "PAID":
-        count += 2
-    elif billing_10 == "LOYAL PAID":
-        count += 3
-    else:
-        count += 0
-    
-    if billing_9 == "LATE PAID":
-        count += 1
-    elif billing_9 == "PAID":
-        count += 2
-    elif billing_9 == "LOYAL PAID":
-        count += 3
-    else:
-        count += 0
-    
-    if billing_8 == "LATE PAID":
-        count += 1
-    elif billing_8 == "PAID":
-        count += 2
-    elif billing_8 == "LOYAL PAID":
-        count += 3
-    else:
-        count += 0
-    
-    if billing_7 == "LATE PAID":
-        count += 1
-    elif billing_7 == "PAID":
-        count += 2
-    elif billing_7 == "LOYAL PAID":
-        count += 3
-    else:
-        count += 0
-    
-    if billing_6 == "LATE PAID":
-        count += 1
-    elif billing_6 == "PAID":
-        count += 2
-    elif billing_6 == "LOYAL PAID":
-        count += 3
-    else:
-        count += 0
-      
-    if billing_5 == "LATE PAID":
-        count += 1
-    elif billing_5 == "PAID":
-        count += 2
-    elif billing_5 == "LOYAL PAID":
-        count += 3
-    else:
-        count += 0
-    
-    if billing_4 == "LATE PAID":
-        count += 1
-    elif billing_4 == "PAID":
-        count += 2
-    elif billing_4 == "LOYAL PAID":
-        count += 3
-    else:
-        count += 0
-    
-    if billing_3 == "LATE PAID":
-        count += 1
-    elif billing_3 == "PAID":
-        count += 2
-    elif billing_3 == "LOYAL PAID":
-        count += 3
-    else:
-        count += 0
-
-    if billing_2 == "LATE PAID":
-        count += 1
-    elif billing_2 == "PAID":
-        count += 2
-    elif billing_2 == "LOYAL PAID":
-        count += 3
-    else:
-        count += 0
-    
-    if billing_1 == "LATE PAID":
-        count += 1
-    elif billing_1 == "PAID":
-        count += 2
-    elif billing_1 == "LOYAL PAID":
-        count += 3
-    else:
-        count += 0
-    
-    return count
-
 @app.get("/predict/")
 def predict(url: str = Form(...)):
     df = pd.read_csv(url)
@@ -277,16 +183,6 @@ def predict(url: str = Form(...)):
                                                x["billing_3_status"], 
                                                x["billing_2_status"], 
                                                x["billing_1_status"]), axis = 1)
-    df["status_index"] = df.apply(lambda x: convert_status_index(x["billing_10_status"], 
-                                                                      x["billing_9_status"], 
-                                                                      x["billing_8_status"], 
-                                                                      x["billing_7_status"], 
-                                                                      x["billing_6_status"], 
-                                                                      x["billing_5_status"], 
-                                                                      x["billing_4_status"], 
-                                                                      x["billing_3_status"], 
-                                                                      x["billing_2_status"], 
-                                                                      x["billing_1_status"]), axis = 1)
     df["churn_index"] = df.apply(lambda x: convert_churn_index(x["billing_2_paymentDate"], 
                                                                x["billing_1_paymentDate"]), axis = 1)
     df["mean"] = df[["billing_10_amountTotal",
@@ -299,6 +195,7 @@ def predict(url: str = Form(...)):
                      "billing_3_amountTotal",
                      "billing_2_amountTotal",
                      "billing_1_amountTotal"]].replace(0, np.NaN).mean(axis = 1).values
+    df["mean"].loc[df["mean"].isnull()] = 0
 
     data = np.reshape(df[["billing_10_amountTotal", "billing_10_paymentDate", "billing_10_status", "LTV", "mean", "churn_index",
                           "billing_9_amountTotal", "billing_9_paymentDate", "billing_9_status", "LTV", "mean", "churn_index",
@@ -353,10 +250,11 @@ def predict(url: str = Form(...)):
 
     for i in range(10):
         data[:, i, 2] = sc_stat.transform(data[:, i, 2].reshape(-1, 1)).reshape(-1)
-
+    
     data = np.array(data)
     data = np.reshape(data, (data.shape[0], data.shape[1], data.shape[2]))
     data2 = data[:, 0, 3:6].astype(float)
+    data2[:, 1] = sc_mean.transform(data2[:, 1].reshape(-1, 1)).reshape(data2.shape[0])
     data = data[:, :, :3].astype(float)
 
     lstm_A_test = model_A.predict([data[:, :, 0], data2])
@@ -376,7 +274,7 @@ def predict(url: str = Form(...)):
     df["paymentDate_prediction_description"] = df["lstm_paymentDate"].apply(lambda x: "Pola Data Churn" if x < 0.25 else "-")
     df["loyality_description"] = np.where(lstm_C_test >= 0.85, "Loyal", np.where(lstm_C_test >= 0.65, "Agak Loyal", "Telat Bayar"))
     df["activity_description"] = df["churn_index"].apply(lambda x: "Tidak Aktif 2 Bulan Terakhir" if x == 0 else "-")
-    
+ 
     json_dict = json.dumps(df[["ND", 
                                "predict_percentage",
                                "predict_description",
