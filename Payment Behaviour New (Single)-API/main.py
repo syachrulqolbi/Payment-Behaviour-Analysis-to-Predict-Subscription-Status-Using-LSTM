@@ -20,6 +20,7 @@ sc_stat = joblib.load("scaler_stat.gz")
 sc_mean = joblib.load("scaler_mean.gz")
 
 class Data(BaseModel):
+    billing_11_amountTotal: str
     billing_10_amountTotal: str
     billing_9_amountTotal: str
     billing_8_amountTotal: str
@@ -31,6 +32,7 @@ class Data(BaseModel):
     billing_2_amountTotal: str
     billing_1_amountTotal: str
 
+    billing_11_paymentDate: str
     billing_10_paymentDate: str
     billing_9_paymentDate: str
     billing_8_paymentDate: str
@@ -42,6 +44,7 @@ class Data(BaseModel):
     billing_2_paymentDate: str
     billing_1_paymentDate: str
 
+    billing_11_period: str
     billing_10_period: str
     billing_9_period: str
     billing_8_period: str
@@ -87,38 +90,70 @@ def convert_churn_index(billing_3, billing_2, billing_1):
 
 @app.get("/predict")
 def predict(data: Data):
-    amountTotal = [data.billing_10_amountTotal,
-                   data.billing_9_amountTotal,
-                   data.billing_8_amountTotal,
-                   data.billing_7_amountTotal,
-                   data.billing_6_amountTotal,
-                   data.billing_5_amountTotal,
-                   data.billing_4_amountTotal,
-                   data.billing_3_amountTotal,
-                   data.billing_2_amountTotal,
-                   data.billing_1_amountTotal]
-    paymentDate = [data.billing_10_paymentDate,
-                   data.billing_9_paymentDate,
-                   data.billing_8_paymentDate,
-                   data.billing_7_paymentDate,
-                   data.billing_6_paymentDate,
-                   data.billing_5_paymentDate,
-                   data.billing_4_paymentDate,
-                   data.billing_3_paymentDate,
-                   data.billing_2_paymentDate,
-                   data.billing_1_paymentDate]
-    period = [data.billing_10_period,
-              data.billing_9_period,
-              data.billing_8_period,
-              data.billing_7_period,
-              data.billing_6_period,
-              data.billing_5_period,
-              data.billing_4_period,
-              data.billing_3_period,
-              data.billing_2_period,
-              data.billing_1_period]
+    if int(datetime.today().strftime("%d")) <= 20 and data.billing_1_paymentDate[-2:] == "00":
+    	amountTotal = [data.billing_11_amountTotal,
+		       data.billing_10_amountTotal,
+                       data.billing_9_amountTotal,
+                       data.billing_8_amountTotal,
+                       data.billing_7_amountTotal,
+                       data.billing_6_amountTotal,
+                       data.billing_5_amountTotal,
+                       data.billing_4_amountTotal,
+                       data.billing_3_amountTotal,
+                       data.billing_2_amountTotal]
+    	paymentDate = [data.billing_11_paymentDate,
+		       data.billing_10_paymentDate,
+                       data.billing_9_paymentDate,
+                       data.billing_8_paymentDate,
+                       data.billing_7_paymentDate,
+                       data.billing_6_paymentDate,
+                       data.billing_5_paymentDate,
+                       data.billing_4_paymentDate,
+                       data.billing_3_paymentDate,
+                       data.billing_2_paymentDate]
+    	period = [data.billing_11_period,
+		  data.billing_10_period,
+		  data.billing_9_period,
+                  data.billing_8_period,
+                  data.billing_7_period,
+                  data.billing_6_period,
+                  data.billing_5_period,
+                  data.billing_4_period,
+                  data.billing_3_period,
+                  data.billing_2_period]
+    else:
+    	amountTotal = [data.billing_10_amountTotal,
+                       data.billing_9_amountTotal,
+                       data.billing_8_amountTotal,
+                       data.billing_7_amountTotal,
+                       data.billing_6_amountTotal,
+                       data.billing_5_amountTotal,
+                       data.billing_4_amountTotal,
+                       data.billing_3_amountTotal,
+                       data.billing_2_amountTotal,
+                       data.billing_1_amountTotal]
+    	paymentDate = [data.billing_10_paymentDate,
+                       data.billing_9_paymentDate,
+                       data.billing_8_paymentDate,
+                       data.billing_7_paymentDate,
+                       data.billing_6_paymentDate,
+                       data.billing_5_paymentDate,
+                       data.billing_4_paymentDate,
+                       data.billing_3_paymentDate,
+                       data.billing_2_paymentDate,
+                       data.billing_1_paymentDate]
+    	period = [data.billing_10_period,
+                  data.billing_9_period,
+                  data.billing_8_period,
+                  data.billing_7_period,
+                  data.billing_6_period,
+                  data.billing_5_period,
+                  data.billing_4_period,
+                  data.billing_3_period,
+                  data.billing_2_period,
+                  data.billing_1_period]
     status = []
-
+    
     for i in range(10):
         paymentDate[i] = int(paymentDate[i][-2:]) if int(paymentDate[i][-4:-2]) == int(period[i][-2:]) and int(paymentDate[i][-2:]) != 0 else (int(32) if int(paymentDate[i][-2:]) == 0 else int(31))
         status.append(3 if paymentDate[i] >= 1 and paymentDate[i] < 11 else (2 if paymentDate[i] >= 11 and paymentDate[i] < 22 else (1 if paymentDate[i] >= 22 and paymentDate[i] < 32 else 0)))
@@ -136,7 +171,7 @@ def predict(data: Data):
             [amountTotal[9], paymentDate[9], status[9]]]
             
     data = np.array([data])
-    
+    #print(data)
     data2 = [convert_LTV(status[0], status[1], status[2], status[3], status[4], status[5], status[6], status[7], status[8], status[9]), 
              sum(amountTotal) / len(amountTotal),
              #sum(i for i in amountTotal if i != 0) / len([i for i in amountTotal if i != 0]),
@@ -144,7 +179,8 @@ def predict(data: Data):
     data2 = np.array([data2])
 
     if data2[0, 0] < 10 and data2[0, 0] > 1:
-        if int(datetime.today().strftime("%d")) <= 20 and data[:, :, 1][0][9] == 0:
+        #if int(datetime.today().strftime("%d")) <= 20 and data[:, :, 1][0][9] == 32:
+        if data[:, :, 1][0][9] == 32:
             x_temp = np.linspace(1, int(data2[0, 0] - 1), num = int(data2[0, 0] - 1), endpoint = True)
             xnew = np.linspace(1, int(data2[0, 0] - 1), num = 10, endpoint = True)
 
@@ -221,7 +257,7 @@ def predict(data: Data):
         status = "Agak Loyal"
     else:
         status = "Loyal"
-    print(lstm_A_test, lstm_B_test, lstm_C_test)
+    #print(lstm_A_test, lstm_B_test, lstm_C_test)
     return {
         "Percentage": round(float(result), 4) * 100,
         "Predict Description" : status,
