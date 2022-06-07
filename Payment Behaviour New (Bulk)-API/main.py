@@ -132,11 +132,9 @@ def predict(url: str = Form(...)):
     
     df["TANGGAL"] = df.apply(lambda x: convert_paymentDate(x["TANGGAL"],
                                                            x["PERIODE"]), axis = 1)
-
+    
     df = check_date(df, df["PERIODE"].unique())
-    #df = df.loc[df["PERIODE"] >= np.sort(df["PERIODE"].unique())[-10:][0]]
-    df = df.loc[(df["PERIODE"] >= np.sort(df["PERIODE"].unique())[-11:][0]) &
-		(df["PERIODE"] < np.sort(df["PERIODE"].unique())[-1:][0])]
+    df = df.loc[df["PERIODE"] >= np.sort(df["PERIODE"].unique())[-10:][0]]
 
     df = df.pivot_table(index = "ND", columns = "PERIODE", aggfunc = np.sum).join(df.pivot_table(index = "ND", columns = "PERIODE", values = ["TANGGAL"], aggfunc = "last"), how = "outer")
     df.reset_index(level = 0, inplace = True)
@@ -161,10 +159,9 @@ def predict(url: str = Form(...)):
                                             "billing_3_paymentDate",
                                             "billing_2_paymentDate",
                                             "billing_1_paymentDate"])
-    
     df = df.drop(df.loc[(df["ND"].isnull())].index)
     df = df.reset_index(drop = True)
-    print("Len DF", len(df))
+
     for month in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
         df["billing_{}_paymentDate".format(month)].loc[df["billing_{}_paymentDate".format(month)].isnull()] = 0
         df["billing_{}_paymentDate".format(month)] = df["billing_{}_paymentDate".format(month)].apply(lambda x: str(x).split("-")[0])
@@ -277,8 +274,7 @@ def predict(url: str = Form(...)):
     df["loyality_description"] = np.where(lstm_C_test >= 0.85, "Loyal", np.where(lstm_C_test >= 0.65, "Agak Loyal", "Telat Bayar"))
     df["activity_description"] = df["churn_index"].apply(lambda x: "Tidak Aktif 2 Bulan Terakhir" if x == 0 else "-")
  
-    df.to_csv("prediction.csv")
-    '''
+    #df.to_csv("prediction.csv")
     json_dict = json.dumps(df[["ND", 
                                "predict_percentage",
                                "predict_description",
@@ -289,7 +285,6 @@ def predict(url: str = Form(...)):
     json_file = open("prediction.json", "w")
     json_file.write(json_dict)
     json_file.close()
-    '''
 
     return {
               "result": "prediction.json"
