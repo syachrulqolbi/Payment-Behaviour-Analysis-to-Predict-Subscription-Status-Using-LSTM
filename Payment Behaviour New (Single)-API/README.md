@@ -110,38 +110,41 @@ Kita akan memprediksi status berlangganan user, apakah user tersebut akan berlan
 
 ```
 {
-    "billing_10_amountTotal": "000.000,00",
-    "billing_9_amountTotal": "781.000,00",
-    "billing_8_amountTotal": "781.000,00",
-    "billing_7_amountTotal": "806.300,00",
-    "billing_6_amountTotal": "665.500,00",
-    "billing_5_amountTotal": "665.500,00",
-    "billing_4_amountTotal": "665.500,00",
-    "billing_3_amountTotal": "665.500,00",
-    "billing_2_amountTotal": "665.500,00",
-    "billing_1_amountTotal": "000.000,00",
+    "billing_11_amountTotal": "38.497,00",
+    "billing_10_amountTotal": "144.950,00",
+    "billing_9_amountTotal": "148.497,00",
+    "billing_8_amountTotal": "148.497,00",
+    "billing_7_amountTotal": "147.765,00",
+    "billing_6_amountTotal": "38.497,00",
+    "billing_5_amountTotal": "51.804,00",
+    "billing_4_amountTotal": "50.482,00",
+    "billing_3_amountTotal": "49.947,00",
+    "billing_2_amountTotal": "49.947,00",
+    "billing_1_amountTotal": "49.947,00",
 
-    "billing_10_paymentDate": "20210100",
-    "billing_9_paymentDate": "20210221",
-    "billing_8_paymentDate": "20210325",
-    "billing_7_paymentDate": "20210421",
-    "billing_6_paymentDate": "20210523",
-    "billing_5_paymentDate": "20210624",
-    "billing_4_paymentDate": "20210715",
-    "billing_3_paymentDate": "20210929",
-    "billing_2_paymentDate": "20210928",
-    "billing_1_paymentDate": "20211000",
+    "billing_11_paymentDate": "20210819",
+    "billing_10_paymentDate": "20210904",
+    "billing_9_paymentDate": "20211003",
+    "billing_8_paymentDate": "20211108",
+    "billing_7_paymentDate": "20211205",
+    "billing_6_paymentDate": "20220107",
+    "billing_5_paymentDate": "20220202",
+    "billing_4_paymentDate": "20220310",
+    "billing_3_paymentDate": "20220402",
+    "billing_2_paymentDate": "20220503",
+    "billing_1_paymentDate": "20220609",
 
-    "billing_10_period": "202101",
-    "billing_9_period": "202102",
-    "billing_8_period": "202103",
-    "billing_7_period": "202104",
-    "billing_6_period": "202105",
-    "billing_5_period": "202106",
-    "billing_4_period": "202107",
-    "billing_3_period": "202108",
-    "billing_2_period": "202109",
-    "billing_1_period": "202110"
+    "billing_11_period": "202108",
+    "billing_10_period": "202109",
+    "billing_9_period": "202110",
+    "billing_8_period": "202111",
+    "billing_7_period": "202112",
+    "billing_6_period": "202201",
+    "billing_5_period": "202202",
+    "billing_4_period": "202203",
+    "billing_3_period": "202204",
+    "billing_2_period": "202205",
+    "billing_1_period": "202206"
 }
 ```
 dan untuk URL API mengunakan format sebagai berikut
@@ -154,11 +157,11 @@ API akan mengembalikan variabel Percentage dan Predict Description beserta value
 ## Hasil Retun API
 ```
 {
-    "Percentage": 20.8,
-    "Predict Description": "Churn",
+    "Percentage": 84.6,
+    "Predict Description": "Agak Loyal",
     "Amount Total Predict Description": "-",
     "Payment Date Predict Description": "-",
-    "Loyality Description": "Telat Bayar",
+    "Loyality Description": "Loyal",
     "Activity Description": "-"
 }
 ```
