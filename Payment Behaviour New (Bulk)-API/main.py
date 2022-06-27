@@ -263,12 +263,14 @@ def predict(url: str = Form(...)):
     predict = model.predict([np.concatenate((np.concatenate((lstm_A_test, lstm_B_test), axis = 1), lstm_C_test), axis = 1), np.concatenate((data2[:, 0:1], data2[:, 2:3]), axis = 1)])
     predict_temp = predict
     predict = np.where(predict_temp >= 0.85, "Loyal", np.where(predict_temp >= 0.65, "Agak Loyal", np.where(predict_temp >= 0.45, "Telat Bayar", np.where(predict_temp >= 0.25, "Cenderung Churn", "Churn"))))
+    predict_2 = np.where(predict_temp >= 0.75, "Not Churn (High)", np.where(predict_temp >= 0.5, "Not Churn (Low)", np.where(predict_temp >= 0.25, "Churn (Low)", "Churn (High)")))
 
     df["lstm_amountTotal"] = lstm_A_test
     df["lstm_paymentDate"] = lstm_B_test
     df["lstm_status"] = lstm_C_test
     df["predict_percentage"] = predict_temp
     df["predict_description"] = predict
+    df["predict_description_2"] = predict_2
     df["amountTotal_prediction_description"] = df["lstm_amountTotal"].apply(lambda x: "Pola Data Churn" if x < 0.25 else "-")
     df["paymentDate_prediction_description"] = df["lstm_paymentDate"].apply(lambda x: "Pola Data Churn" if x < 0.25 else "-")
     df["loyality_description"] = np.where(lstm_C_test >= 0.85, "Loyal", np.where(lstm_C_test >= 0.65, "Agak Loyal", "Telat Bayar"))
@@ -278,6 +280,7 @@ def predict(url: str = Form(...)):
     json_dict = json.dumps(df[["ND", 
                                "predict_percentage",
                                "predict_description",
+                               "predict_description_2",
                                "amountTotal_prediction_description",
                                "paymentDate_prediction_description",
                                "loyality_description",
